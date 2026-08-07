@@ -12,12 +12,6 @@ locals {
   network_data = var.use_dhcp ? local.dhcp_network_data : local.static_network_data
 }
 
-resource "time_sleep" "wait_for_cluster_deletion" {
-  destroy_duration = "45s"
-
-  depends_on = [rancher2_cluster_v2.cluster]
-}
-
 resource "rancher2_cloud_credential" "harvester" {
   name = "${var.clustername}-harvester"
   harvester_credential_config {
@@ -25,8 +19,12 @@ resource "rancher2_cloud_credential" "harvester" {
     cluster_type       = var.harvester_cluster_type
     kubeconfig_content = local.harvester_kc
   }
+}
 
-  depends_on = [time_sleep.wait_for_cluster_deletion]
+resource "time_sleep" "wait_for_cluster_deletion" {
+  destroy_duration = "45s"
+
+  depends_on = [rancher2_cloud_credential.harvester]
 }
 
 resource "rancher2_machine_config_v2" "control_plane" {
@@ -88,6 +86,8 @@ resource "rancher2_machine_config_v2" "worker" {
 resource "rancher2_cluster_v2" "cluster" {
   name               = var.clustername
   kubernetes_version = var.kubernetes_version
+
+  depends_on = [time_sleep.wait_for_cluster_deletion]
 
   rke_config {
     machine_pools {
