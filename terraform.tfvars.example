@@ -28,6 +28,6 @@ worker_disk_size        = 60
 
 namespace = "default"
 image     = "harvester-public/image-mfv78" # Harvester backing image (noble-24-04)
-vlan      = "harvester-public/vlan-172"
+vlan      = "harvester-public/vlan172"
 ssh_user  = "eati"
 domain    = "ati.gov.et"

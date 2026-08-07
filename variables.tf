@@ -73,7 +73,7 @@ variable "clustername" {
 
 variable "vlan" {
   type        = string
-  default     = "harvester-public/vlan-172"
+  default     = "harvester-public/vlan172"
   description = "Harvester VM network VLAN name"
 }
 

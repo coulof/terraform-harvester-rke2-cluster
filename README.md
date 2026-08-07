@@ -51,7 +51,7 @@ This module automates the end-to-end deployment of downstream RKE2 Kubernetes cl
 | `worker_disk_size` | `number` | `60` | Disk size (GB) per worker node |
 | `image` | `string` | `"harvester-public/image-mfv78"` | Harvester VM backing image ID |
 | `namespace` | `string` | `"default"` | Harvester VM target namespace |
-| `vlan` | `string` | `"harvester-public/vlan-172"` | Harvester VM network VLAN |
+| `vlan` | `string` | `"harvester-public/vlan172"` | Harvester VM network VLAN |
 | `domain` | `string` | `"ati.gov.et"` | Search domain name for FQDN resolution |
 | `ssh_user` | `string` | `"eati"` | Node SSH admin user account |
 
@@ -89,7 +89,7 @@ worker_disk_size     = 60
 
 namespace            = "default"
 image                = "harvester-public/image-mfv78" # Ubuntu 24.04 Cloud Image
-vlan                 = "harvester-public/vlan-172"
+vlan                 = "harvester-public/vlan172"
 ssh_user             = "eati"
 domain               = "ati.gov.et"
 ```
