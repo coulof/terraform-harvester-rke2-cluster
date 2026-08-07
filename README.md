@@ -6,13 +6,14 @@ A production-ready Terraform module for provisioning and managing RKE2 Kubernete
 
 ## 📖 Overview
 
-This module automates the end-to-end deployment of downstream RKE2 Kubernetes clusters on Harvester VMs. It handles infrastructure provisioning, node networking via cloud-init, RBAC configuration, and full integration with the **Harvester Cloud Provider**.
+This module automates the end-to-end deployment of downstream RKE2 Kubernetes clusters on Harvester VMs. It handles infrastructure provisioning, node networking via cloud-init (DHCP or static IP), RBAC configuration, and full integration with the **Harvester Cloud Provider**.
 
 ### Highlights
 * **Harvester Cloud Provider Integration**: Native load balancing and cloud integration using Harvester kubeconfig credentials (`harvester-kubeconfig.yaml`).
-* **Custom Node Initialization**: Templated `cloud-init` (Ubuntu 24.04) for Netplan static IP allocation, host FQDNs, firewall policies, and SSH access.
-* **Flexible Cluster Topologies**: Supports single-node all-in-one clusters (Control Plane + ETCD + Worker) and multi-node pool topologies.
+* **Custom Node Initialization**: Templated `cloud-init` (Ubuntu 24.04) for Netplan dynamic DHCP or static IP allocation, host FQDNs, firewall policies, and SSH access.
+* **Flexible Cluster Topologies**: Multi-node pool topologies with dedicated Control Plane (+ ETCD) and Worker pools.
 * **Pluggable Networking**: Easily switch CNI plugins (Cilium, Calico, Canal) and customize Kubernetes versions.
+* **Graceful Teardown**: Built-in teardown delay (`time_sleep`) ensures Rancher background finalizers complete before removing credentials.
 
 ---
 
@@ -39,12 +40,18 @@ This module automates the end-to-end deployment of downstream RKE2 Kubernetes cl
 | `clustername` | `string` | `"test-rke2-clus"` | Name of the downstream RKE2 cluster |
 | `kubernetes_version` | `string` | `"v1.35.6+rke2r1"` | RKE2 Kubernetes version |
 | `cni` | `string` | `"cilium"` | CNI network plugin (`cilium`, `calico`, `canal`, `none`) |
+| `use_dhcp` | `bool` | `true` | Enable DHCP for node network interface |
+| `control_plane_count` | `number` | `3` | Number of control-plane nodes |
+| `control_plane_cpu` | `string` | `"4"` | vCPUs per control-plane node |
+| `control_plane_memory` | `string` | `"8"` | Memory (GB) per control-plane node |
+| `control_plane_disk_size` | `number` | `60` | Disk size (GB) per control-plane node |
+| `worker_count` | `number` | `6` | Number of worker nodes |
+| `worker_cpu` | `string` | `"10"` | vCPUs per worker node |
+| `worker_memory` | `string` | `"68"` | Memory (GB) per worker node |
+| `worker_disk_size` | `number` | `60` | Disk size (GB) per worker node |
 | `image` | `string` | `"harvester-public/image-mfv78"` | Harvester VM backing image ID |
 | `namespace` | `string` | `"default"` | Harvester VM target namespace |
 | `vlan` | `string` | `"harvester-public/vlan-172"` | Harvester VM network VLAN |
-| `master_ip` | `string` | `"172.16.16.46/24"` | Static IP CIDR for master / all-in-one node |
-| `gateway_ip` | `string` | `"172.16.16.1"` | Network gateway IP address |
-| `dns_servers` | `list(string)` | `["10.1.10.30", "10.1.10.40"]` | List of DNS server IP addresses |
 | `domain` | `string` | `"ati.gov.et"` | Search domain name for FQDN resolution |
 | `ssh_user` | `string` | `"eati"` | Node SSH admin user account |
 
@@ -65,17 +72,26 @@ harvester_cluster_type    = "imported"
 harvester_kubeconfig_path = "./harvester-kubeconfig.yaml"
 
 clustername          = "test-rke2-clus"
-master_ip            = "172.16.16.46/24"
 cni                  = "cilium"
 kubernetes_version   = "v1.35.6+rke2r1"
+
+use_dhcp             = true
+
+control_plane_count  = 3
+control_plane_cpu    = "4"
+control_plane_memory = "8"
+control_plane_disk_size = 60
+
+worker_count         = 6
+worker_cpu           = "10"
+worker_memory        = "68"
+worker_disk_size     = 60
 
 namespace            = "default"
 image                = "harvester-public/image-mfv78" # Ubuntu 24.04 Cloud Image
 vlan                 = "harvester-public/vlan-172"
 ssh_user             = "eati"
 domain               = "ati.gov.et"
-gateway_ip           = "172.16.16.1"
-dns_servers          = ["10.1.10.30", "10.1.10.40"]
 ```
 
 ### 2. Deploy Cluster
@@ -99,16 +115,11 @@ terraform apply
 1. Rancher API & Local Kubeconfig
    └── Load Harvester credentials from 'harvester-kubeconfig.yaml'
 
-2. Cloud Credential & Machine Config
+2. Cloud Credential & Machine Configs
    ├── Create Rancher Cloud Credential (rancher2_cloud_credential.harvester)
-   └── Create Harvester Machine Config (rancher2_machine_config_v2.all_in_one)
+   ├── Create Control Plane Config (rancher2_machine_config_v2.control_plane)
+   └── Create Worker Config (rancher2_machine_config_v2.worker)
 
 3. Provision RKE2 Downstream Cluster
-   └── Provision RKE2 Cluster on Harvester with Harvester Cloud Provider (rancher2_cluster_v2.cluster)
+   └── Provision RKE2 Cluster with 3 CP + 6 Worker pools (rancher2_cluster_v2.cluster)
 ```
-
----
-
-## 🗺️ Roadmap
-
-* **Dynamic DHCP Support (`use_dhcp`)**: Add a toggle variable to switch Netplan configs between static IP allocation and DHCP, enabling seamless multi-node machine pool scaling (`quantity > 1`).

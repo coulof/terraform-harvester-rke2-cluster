@@ -89,6 +89,60 @@ variable "domain" {
   description = "Domain name for FQDN"
 }
 
+variable "use_dhcp" {
+  type        = bool
+  default     = true
+  description = "Use DHCP for node IP allocation instead of static IP addresses"
+}
+
+variable "control_plane_count" {
+  type        = number
+  default     = 3
+  description = "Number of control-plane (master) nodes"
+}
+
+variable "control_plane_cpu" {
+  type        = string
+  default     = "4"
+  description = "vCPU count for control-plane nodes"
+}
+
+variable "control_plane_memory" {
+  type        = string
+  default     = "8"
+  description = "Memory size (in GB) for control-plane nodes"
+}
+
+variable "control_plane_disk_size" {
+  type        = number
+  default     = 60
+  description = "Disk size (in GB) for control-plane nodes"
+}
+
+variable "worker_count" {
+  type        = number
+  default     = 6
+  description = "Number of worker nodes"
+}
+
+variable "worker_cpu" {
+  type        = string
+  default     = "10"
+  description = "vCPU count for worker nodes"
+}
+
+variable "worker_memory" {
+  type        = string
+  default     = "68"
+  description = "Memory size (in GB) for worker nodes"
+}
+
+variable "worker_disk_size" {
+  type        = number
+  default     = 60
+  description = "Disk size (in GB) for worker nodes"
+}
+
 variable "master_ip" {
   type        = string
   default     = "172.16.16.10/24"

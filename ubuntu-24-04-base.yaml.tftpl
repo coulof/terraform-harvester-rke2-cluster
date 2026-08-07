@@ -9,7 +9,7 @@ runcmd:
   - systemctl stop ufw
   - systemctl disable ufw
 users:
-  - name: eati
+  - name: ${ssh_user}
     lock_passwd: false
     hashed_passwd: '$6$ZvdW6Qwo3lEeFZa$32oKhbzwknADiobiUst8zocsMdXI0J1LLE40IdaisE7pCVYNgONrHgh7QHMH2KijSNxodZvmiq5Yi6iP4gcaF1'
     shell: /bin/bash

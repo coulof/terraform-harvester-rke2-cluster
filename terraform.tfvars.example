@@ -7,16 +7,27 @@ harvester_fleet_namespace = "fleet-default"
 harvester_cluster_type    = "imported"
 harvester_kubeconfig_path = "./harvester-kubeconfig.yaml"
 
-clustername          = "test-rke2-clus"
-master_ip            = "172.16.16.46/24"
-cni                  = "cilium"
-kubernetes_version   = "v1.35.6+rke2r1"
+clustername        = "test-rke2-clus"
+cni                = "cilium"
+kubernetes_version = "v1.35.6+rke2r1"
 
-namespace            = "default"
-# Harvester backing image: noble-24-04-server-cloudimg-amd64
-image                = "harvester-public/image-mfv78"
-vlan                 = "harvester-public/vlan-172"
-ssh_user             = "eati"
-domain               = "ati.gov.et"
-gateway_ip           = "172.16.16.1"
-dns_servers          = ["10.1.10.30", "10.1.10.40"]
+# Network allocation
+use_dhcp = true
+
+# Control-plane pool (3 nodes)
+control_plane_count     = 3
+control_plane_cpu       = "4"
+control_plane_memory    = "8"
+control_plane_disk_size = 60
+
+# Worker pool (6 nodes)
+worker_count            = 6
+worker_cpu              = "10"
+worker_memory           = "68"
+worker_disk_size        = 60
+
+namespace = "default"
+image     = "harvester-public/image-mfv78" # Harvester backing image (noble-24-04)
+vlan      = "harvester-public/vlan-172"
+ssh_user  = "eati"
+domain    = "ati.gov.et"
