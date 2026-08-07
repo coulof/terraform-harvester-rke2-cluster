@@ -1,0 +1,22 @@
+rancher_api_url      = "https://rancher.example.com"
+rancher_bearer_token = "token-xxxxx:xxxxxxxxxxxxxxxxxxxx"
+rancher_insecure     = true
+
+harvester_cluster_name    = "harvester"
+harvester_fleet_namespace = "fleet-default"
+harvester_cluster_type    = "imported"
+harvester_kubeconfig_path = "./harvester-kubeconfig.yaml"
+
+clustername          = "test-rke2-clus"
+master_ip            = "172.16.16.46/24"
+cni                  = "cilium"
+kubernetes_version   = "v1.35.6+rke2r1"
+
+namespace            = "default"
+# Harvester backing image: noble-24-04-server-cloudimg-amd64
+image                = "harvester-public/image-mfv78"
+vlan                 = "harvester-public/vlan-172"
+ssh_user             = "eati"
+domain               = "ati.gov.et"
+gateway_ip           = "172.16.16.1"
+dns_servers          = ["10.1.10.30", "10.1.10.40"]

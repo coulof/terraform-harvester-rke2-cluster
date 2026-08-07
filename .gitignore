@@ -1,0 +1,24 @@
+# Sensitive Credentials & Variable Files
+*.tfvars
+!terraform.tfvars.example
+*.tfvars.json
+
+# Local Kubeconfig Files & Bearer Tokens
+*kubeconfig*.yaml
+*kubeconfig*.yml
+*kubeconfig*
+csi-kubeconfig
+.rancher_api_url
+.rancher_bearer_token
+
+# Terraform State & Cache Directories
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# System & Editor Temp Files
+.DS_Store
+*.swp
+*~
