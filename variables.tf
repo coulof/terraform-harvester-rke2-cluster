@@ -53,6 +53,12 @@ variable "cni" {
   description = "CNI network plugin for the RKE2 downstream cluster (e.g. calico, cilium, canal, none)"
 }
 
+variable "ingress_mode" {
+  type        = string
+  default     = "traefik"
+  description = "Ingress controller mode for RKE2 (e.g. traefik, ingress-nginx, none)"
+}
+
 variable "image" {
   type        = string
   default     = "harvester-public/image-mfv78"
@@ -141,6 +147,12 @@ variable "worker_disk_size" {
   type        = number
   default     = 60
   description = "Disk size (in GB) for worker nodes"
+}
+
+variable "storage_class" {
+  type        = string
+  default     = ""
+  description = "Harvester StorageClass backing the VM machine disks (leave empty to use Harvester default StorageClass)"
 }
 
 variable "master_ip" {

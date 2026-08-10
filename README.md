@@ -41,6 +41,7 @@ This module automates the end-to-end deployment of downstream RKE2 Kubernetes cl
 | `clustername` | `string` | `"test-rke2-clus"` | Name of the downstream RKE2 cluster |
 | `kubernetes_version` | `string` | `"v1.35.6+rke2r1"` | RKE2 Kubernetes version |
 | `cni` | `string` | `"cilium"` | CNI network plugin (`cilium`, `calico`, `canal`, `none`) |
+| `ingress_mode` | `string` | `"traefik"` | Ingress controller mode (`traefik`, `ingress-nginx`, `none`) |
 | `use_dhcp` | `bool` | `true` | Enable DHCP for node network interface |
 | `control_plane_count` | `number` | `3` | Number of control-plane nodes |
 | `control_plane_cpu` | `string` | `"4"` | vCPUs per control-plane node |
@@ -50,6 +51,7 @@ This module automates the end-to-end deployment of downstream RKE2 Kubernetes cl
 | `worker_cpu` | `string` | `"10"` | vCPUs per worker node |
 | `worker_memory` | `string` | `"68"` | Memory (GB) per worker node |
 | `worker_disk_size` | `number` | `60` | Disk size (GB) per worker node |
+| `storage_class` | `string` | `""` | Harvester StorageClass backing VM machine disks (default: Harvester default) |
 | `image` | `string` | `"harvester-public/image-mfv78"` | Harvester VM backing image ID |
 | `namespace` | `string` | `"default"` | Harvester VM target namespace |
 | `vlan` | `string` | `"harvester-public/vlan178"` | Harvester VM network VLAN |

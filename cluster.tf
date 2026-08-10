@@ -34,11 +34,16 @@ resource "rancher2_machine_config_v2" "control_plane" {
     cpu_count    = var.control_plane_cpu
     memory_size  = var.control_plane_memory
     disk_info = jsonencode({
-      disks = [{
-        imageName = length(split("/", var.image)) > 1 ? var.image : "${var.namespace}/${var.image}"
-        size      = var.control_plane_disk_size
-        bootOrder = 1
-      }]
+      disks = [
+        merge(
+          {
+            imageName = length(split("/", var.image)) > 1 ? var.image : "${var.namespace}/${var.image}"
+            size      = var.control_plane_disk_size
+            bootOrder = 1
+          },
+          var.storage_class != "" ? { storageClassName = var.storage_class } : {}
+        )
+      ]
     })
     network_info = jsonencode({
       interfaces = [{
@@ -62,11 +67,16 @@ resource "rancher2_machine_config_v2" "worker" {
     cpu_count    = var.worker_cpu
     memory_size  = var.worker_memory
     disk_info = jsonencode({
-      disks = [{
-        imageName = length(split("/", var.image)) > 1 ? var.image : "${var.namespace}/${var.image}"
-        size      = var.worker_disk_size
-        bootOrder = 1
-      }]
+      disks = [
+        merge(
+          {
+            imageName = length(split("/", var.image)) > 1 ? var.image : "${var.namespace}/${var.image}"
+            size      = var.worker_disk_size
+            bootOrder = 1
+          },
+          var.storage_class != "" ? { storageClassName = var.storage_class } : {}
+        )
+      ]
     })
     network_info = jsonencode({
       interfaces = [{
@@ -126,7 +136,8 @@ resource "rancher2_cluster_v2" "cluster" {
     }
 
     machine_global_config = yamlencode({
-      cni = var.cni
+      cni          = var.cni
+      ingress-mode = var.ingress_mode
     })
 
     chart_values = yamlencode({

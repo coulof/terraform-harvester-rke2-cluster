@@ -9,6 +9,7 @@ harvester_kubeconfig_path = "./harvester-kubeconfig.yaml"
 
 clustername        = "test-rke2-clus"
 cni                = "cilium"
+ingress_mode       = "traefik"
 kubernetes_version = "v1.35.6+rke2r1"
 
 # Network allocation
@@ -26,8 +27,9 @@ worker_cpu              = "10"
 worker_memory           = "68"
 worker_disk_size        = 60
 
-namespace = "default"
-image     = "harvester-public/image-mfv78" # Harvester backing image (noble-24-04)
-vlan      = "harvester-public/vlan172"
+namespace     = "default"
+image         = "harvester-public/image-mfv78" # Harvester backing image (noble-24-04)
+storage_class = ""                              # Harvester StorageClass (leave empty for Harvester cluster default)
+vlan          = "harvester-public/vlan172"
 ssh_user  = "eati"
 domain    = "ati.gov.et"
