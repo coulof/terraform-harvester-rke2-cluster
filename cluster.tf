@@ -1,5 +1,6 @@
 locals {
-  harvester_kc = fileexists(var.harvester_kubeconfig_path) ? file(var.harvester_kubeconfig_path) : data.rancher2_cluster_v2.harvester.kube_config
+  raw_kc       = fileexists(var.harvester_kubeconfig_path) ? file(var.harvester_kubeconfig_path) : data.rancher2_cluster_v2.harvester.kube_config
+  harvester_kc = replace(local.raw_kc, "context:", "context:\n    namespace: ${var.namespace}")
 
   dhcp_network_data = templatefile("${path.module}/ubuntu-24-04-dhcp-net-data.yaml.tftpl", {})
   static_network_data = templatefile("${path.module}/ubuntu-24-04-base-net-data-vlan172.yaml.tftpl", {
@@ -144,10 +145,12 @@ resource "rancher2_cluster_v2" "cluster" {
       harvester-cloud-provider = {
         global = {
           cattle = {
-            clusterName = var.clustername
+            clusterName      = var.clustername
+            clusterNamespace = var.namespace
           }
         }
-        cloudConfigPath = "/var/lib/rancher/rke2/etc/config-files/cloud-provider-config"
+        clusterNamespace = var.namespace
+        cloudConfigPath  = "/var/lib/rancher/rke2/etc/config-files/cloud-provider-config"
         kube-vip = {
           tolerations = [
             {
