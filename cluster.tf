@@ -1,6 +1,6 @@
 locals {
   raw_kc       = fileexists(var.harvester_kubeconfig_path) ? file(var.harvester_kubeconfig_path) : data.rancher2_cluster_v2.harvester.kube_config
-  harvester_kc = replace(local.raw_kc, "context:", "context:\n    namespace: ${var.namespace}")
+  harvester_kc = replace(local.raw_kc, "- context:", "- context:\n    namespace: ${var.namespace}")
 
   dhcp_network_data = templatefile("${path.module}/ubuntu-24-04-dhcp-net-data.yaml.tftpl", {})
   static_network_data = templatefile("${path.module}/ubuntu-24-04-base-net-data-vlan172.yaml.tftpl", {
@@ -106,7 +106,7 @@ resource "rancher2_cluster_v2" "cluster" {
       cloud_credential_secret_name = rancher2_cloud_credential.harvester.id
       control_plane_role           = true
       etcd_role                    = true
-      worker_role                  = false
+      worker_role                  = var.worker_count == 0 ? true : false
       quantity                     = var.control_plane_count
 
       machine_config {
@@ -170,6 +170,9 @@ resource "rancher2_cluster_v2" "cluster" {
             }
           ]
         }
+      }
+      harvester-csi-driver = {
+        clusterNamespace = var.namespace
       }
     })
   }
