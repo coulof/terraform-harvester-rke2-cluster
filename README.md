@@ -41,7 +41,7 @@ This module automates the end-to-end deployment of downstream RKE2 Kubernetes cl
 | `clustername` | `string` | `"test-rke2-clus"` | Name of the downstream RKE2 cluster |
 | `kubernetes_version` | `string` | `"v1.35.6+rke2r1"` | RKE2 Kubernetes version |
 | `cni` | `string` | `"cilium"` | CNI network plugin (`cilium`, `calico`, `canal`, `none`) |
-| `ingress_mode` | `string` | `"traefik"` | Ingress controller mode (`traefik`, `ingress-nginx`, `none`) |
+| `ingress_mode` | `string` | `"traefik"` | Ingress controller (`traefik`, `ingress-nginx`, `none`) |
 | `use_dhcp` | `bool` | `true` | Enable DHCP for node network interface |
 | `control_plane_count` | `number` | `3` | Number of control-plane nodes |
 | `control_plane_cpu` | `string` | `"4"` | vCPUs per control-plane node |

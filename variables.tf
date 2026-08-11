@@ -53,10 +53,16 @@ variable "cni" {
   description = "CNI network plugin for the RKE2 downstream cluster (e.g. calico, cilium, canal, none)"
 }
 
+variable "control_plane_pool_name" {
+  type        = string
+  default     = "control-plane"
+  description = "Display name of the control plane machine pool in Rancher"
+}
+
 variable "ingress_mode" {
   type        = string
   default     = "traefik"
-  description = "Ingress controller mode for RKE2 (e.g. traefik, ingress-nginx, none)"
+  description = "Ingress controller for RKE2 (e.g. traefik, ingress-nginx, none)"
 }
 
 variable "image" {

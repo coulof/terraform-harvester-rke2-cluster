@@ -102,7 +102,7 @@ resource "rancher2_cluster_v2" "cluster" {
 
   rke_config {
     machine_pools {
-      name                         = "control-plane"
+      name                         = var.control_plane_pool_name
       cloud_credential_secret_name = rancher2_cloud_credential.harvester.id
       control_plane_role           = true
       etcd_role                    = true
@@ -137,8 +137,8 @@ resource "rancher2_cluster_v2" "cluster" {
     }
 
     machine_global_config = yamlencode({
-      cni          = var.cni
-      ingress-mode = var.ingress_mode
+      cni                = var.cni
+      ingress-controller = var.ingress_mode
     })
 
     chart_values = yamlencode({
