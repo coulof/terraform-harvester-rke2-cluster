@@ -65,6 +65,74 @@ variable "ingress_mode" {
   description = "Ingress controller for RKE2 (e.g. traefik, ingress-nginx, none)"
 }
 
+variable "etcd_s3_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable recurring ETCD S3 backups"
+}
+
+variable "etcd_s3_bucket" {
+  type        = string
+  default     = ""
+  description = "S3 bucket name for ETCD backups"
+}
+
+variable "etcd_s3_endpoint" {
+  type        = string
+  default     = ""
+  description = "S3 endpoint host for SeaweedFS"
+}
+
+variable "etcd_s3_access_key" {
+  type        = string
+  default     = ""
+  sensitive   = true
+  description = "S3 access key ID"
+}
+
+variable "etcd_s3_secret_key" {
+  type        = string
+  default     = ""
+  sensitive   = true
+  description = "S3 secret access key"
+}
+
+variable "etcd_s3_region" {
+  type        = string
+  default     = "us-east-1"
+  description = "S3 region"
+}
+
+variable "etcd_s3_folder" {
+  type        = string
+  default     = ""
+  description = "Subfolder inside S3 bucket (defaults to cluster name)"
+}
+
+variable "etcd_s3_skip_ssl_verify" {
+  type        = bool
+  default     = false
+  description = "Skip SSL certificate verification for S3 endpoint"
+}
+
+variable "etcd_s3_ca_cert_path" {
+  type        = string
+  default     = "./caddy-root-ca.cert"
+  description = "Path to custom CA certificate file for S3 endpoint"
+}
+
+variable "etcd_snapshot_schedule_cron" {
+  type        = string
+  default     = "0 */6 * * *"
+  description = "Cron schedule for ETCD snapshots"
+}
+
+variable "etcd_snapshot_retention" {
+  type        = number
+  default     = 7
+  description = "Number of ETCD snapshots to retain"
+}
+
 variable "image" {
   type        = string
   default     = "harvester-public/image-mfv78"

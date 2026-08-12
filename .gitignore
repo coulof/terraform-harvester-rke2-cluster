@@ -2,6 +2,8 @@
 *.tfvars
 !terraform.tfvars.example
 *.tfvars.json
+.ssh/
+*.cert
 
 # Local Kubeconfig Files & Bearer Tokens
 *kubeconfig*.yaml

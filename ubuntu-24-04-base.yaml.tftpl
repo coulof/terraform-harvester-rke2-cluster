@@ -1,7 +1,7 @@
 #cloud-config
 fqdn: ${hostname}.${domain}
 ssh_pwauth: true
-package_update: false
+package_update: true
 packages:
   - qemu-guest-agent
 runcmd:
@@ -16,4 +16,3 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh_authorized_keys:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE71Pf82BiCp98bLPuKhuPdNbVzAMTLqX6lA9hp397+G harvester-cluster-admin'
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEXLfM2OKLZXleIOzIL4TcCLXbHyBTryLEI2sJMn2kxK florian@lima-vpn-ati'

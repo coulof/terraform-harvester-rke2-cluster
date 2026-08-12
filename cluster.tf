@@ -22,6 +22,15 @@ resource "rancher2_cloud_credential" "harvester" {
   }
 }
 
+resource "rancher2_cloud_credential" "s3" {
+  count = var.etcd_s3_enabled ? 1 : 0
+  name  = "${var.clustername}-s3-cred"
+  s3_credential_config {
+    access_key = var.etcd_s3_access_key
+    secret_key = var.etcd_s3_secret_key
+  }
+}
+
 resource "time_sleep" "wait_for_cluster_deletion" {
   destroy_duration = "45s"
 
@@ -95,12 +104,31 @@ resource "rancher2_machine_config_v2" "worker" {
 }
 
 resource "rancher2_cluster_v2" "cluster" {
-  name               = var.clustername
-  kubernetes_version = var.kubernetes_version
+  name                         = var.clustername
+  kubernetes_version           = var.kubernetes_version
+  cloud_credential_secret_name = rancher2_cloud_credential.harvester.id
 
   depends_on = [time_sleep.wait_for_cluster_deletion]
 
   rke_config {
+    etcd {
+      snapshot_schedule_cron = var.etcd_snapshot_schedule_cron
+      snapshot_retention     = var.etcd_snapshot_retention
+
+      dynamic "s3_config" {
+        for_each = var.etcd_s3_enabled ? [1] : []
+        content {
+          bucket                = var.etcd_s3_bucket
+          endpoint              = var.etcd_s3_endpoint
+          cloud_credential_name = rancher2_cloud_credential.s3[0].id
+          folder                = var.etcd_s3_folder != "" ? var.etcd_s3_folder : var.clustername
+          region                = var.etcd_s3_region
+          skip_ssl_verify       = var.etcd_s3_skip_ssl_verify
+          endpoint_ca           = fileexists(var.etcd_s3_ca_cert_path) ? file(var.etcd_s3_ca_cert_path) : null
+        }
+      }
+    }
+
     machine_pools {
       name                         = var.control_plane_pool_name
       cloud_credential_secret_name = rancher2_cloud_credential.harvester.id
