@@ -120,3 +120,10 @@ terraform apply -var-file="main-cluster.tfvars"
 * [`rancher2_cluster_v2` Resource Documentation](https://registry.terraform.io/providers/rancher/rancher2/latest/docs/resources/cluster_v2)
 * [`rancher2_machine_config_v2` Resource Documentation](https://registry.terraform.io/providers/rancher/rancher2/latest/docs/resources/machine_config_v2)
 * [`rancher2_cloud_credential` Resource Documentation](https://registry.terraform.io/providers/rancher/rancher2/latest/docs/resources/cloud_credential)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
